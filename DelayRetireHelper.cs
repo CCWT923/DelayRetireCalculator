@@ -62,88 +62,112 @@ namespace ConsoleApp2
         /// 计算退休年龄
         /// </summary>
         /// <param name="birthday">出生日期</param>
-        /// <param name="sex">男：1，女：2</param>
+        /// <param name="sex">男：1，原50岁退休女：2，原55岁退休女：3</param>
         /// <param name="femaleType">女员工类型，原退休年龄是55岁或者50岁</param>
-        /// <param name="delayMonths"></param>
+        /// <param name="delayMonths">延迟月数</param>
         /// <returns></returns>
-        internal static DateTime? CalcRetireDate(DateTime birthday, int sex, int femaleType, out int delayMonths)
+        internal static DateTime CalcRetireDate(DateTime birthday, int sex, out int delayMonths)
         {
             delayMonths = 0;
-            if(sex == 1)
+
+            delayMonths = 0;
+            if (sex == 1)
             {
-                if (birthday < maleDelayRetireStart || birthday > maleDelayRetireEnd)
+                if (birthday < maleDelayRetireStart)
                 {
                     return new DateTime(1, 1, 1);
                 }
+                if (birthday > maleDelayRetireEnd)
+                {
+                    return new DateTime(2, 2, 2);
+                }
             }
-            else if(sex == 2)
+            else if (sex == 2)
             {
-                if(femaleType == 50)
+                if (birthday < femalDelayRetireStart50)
                 {
-                    if(birthday < femalDelayRetireStart50 || birthday > femalDelayRetireEnd50)
-                    {
-                        return new DateTime(1, 1, 1);
-                    }
+                    return new DateTime(1, 1, 1);
                 }
-                else if(femaleType == 55)
+                if (birthday > femalDelayRetireEnd50)
                 {
-                    if(birthday < femalDelayRetireStart55 || birthday > femalDelayRetireEnd55)
-                    {
-                        return new DateTime(1, 1, 1);
-                    }
+                    return new DateTime(2, 2, 2);
                 }
-                else
+            }
+            else if (sex == 3)
+            {
+                if (birthday < femalDelayRetireStart55)
                 {
-                    return null;
+                    return new DateTime(1, 1, 1);
+                }
+
+                if (birthday > femalDelayRetireEnd55)
+                {
+                    return new DateTime(2, 2, 2);
                 }
             }
             else
             {
-                return null;
+                return new DateTime(3, 3, 3);
             }
+
             DateTime tmpDt;
-            if(sex == 1)
+            if (sex == 1)
             {
                 tmpDt = maleDelayRetireStart;
             }
+            else if (sex == 2)
+            {
+                tmpDt = femalDelayRetireStart50;
+            }
             else
             {
-                if(femaleType == 50)
-                {
-                    tmpDt = femalDelayRetireStart50;
-                }
-                else
-                {
-                    tmpDt = femalDelayRetireStart55;
-                }
+                tmpDt = femalDelayRetireStart55;
             }
 
-            while(tmpDt <= birthday)
+            while (tmpDt <= birthday)
             {
                 delayMonths++;
                 tmpDt = tmpDt.AddMonths(maleRetireMonthIncrement);
             }
 
-            if(sex == 1)
+            if (sex == 1)
             {
                 delayMonths = (int)Math.Ceiling(delayMonths / maleRetireStep);
                 return birthday.AddYears(maleRetireBaseYear).AddMonths(delayMonths);
             }
+            else if (sex == 2)
+            {
+                delayMonths = (int)Math.Ceiling(delayMonths / femaleRetireStep50);
+                return birthday.AddYears(femaleRetireBaseYear50).AddMonths(delayMonths);
+            }
             else
             {
-                if(femaleType == 55)
-                {
-                    delayMonths = (int)Math.Ceiling(delayMonths / femaleRetireStep55);
-                    return birthday.AddYears(femaleRetireBaseYear55).AddMonths(delayMonths);
-                }
-                else
-                {
-                    delayMonths = (int)Math.Ceiling(delayMonths / femaleRetireStep50);
-                    return birthday.AddYears(femaleRetireBaseYear50).AddMonths(delayMonths);
-                }
+                delayMonths = (int)Math.Ceiling(delayMonths / femaleRetireStep55);
+                return birthday.AddYears(femaleRetireBaseYear55).AddMonths(delayMonths);
+            }
+        }
+
+        internal static string GetRetireAgeDescription(DateTime birthDate, DateTime targetDate)
+        {
+            // 计算年龄年份和月份
+            int years = targetDate.Year - birthDate.Year;
+            int months = targetDate.Month - birthDate.Month;
+
+            // 如果当前月还没有到出生月份，减少一年，增加月份
+            if (months < 0)
+            {
+                years--;
+                months += 12;
             }
 
-            
+            // 构建返回的年龄字符串
+            string ageString = $"{years}岁";
+            if (months > 0)
+            {
+                ageString += $"零{months}个月";
+            }
+
+            return ageString;
         }
     }
 }
