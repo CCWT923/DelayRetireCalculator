@@ -37,7 +37,13 @@ namespace ConsoleApp2
         /// 男职工原退休年龄
         /// </summary>
         private static readonly int maleRetireBaseYear = 60;
+        /// <summary>
+        /// 原55岁退休女职工年龄
+        /// </summary>
         private static readonly int femaleRetireBaseYear55 = 55;
+        /// <summary>
+        /// 原50岁退休女职工年龄
+        /// </summary>
         private static readonly int femaleRetireBaseYear50 = 50;
         /// <summary>
         /// 男职工：每4个月延迟1个月
@@ -65,11 +71,9 @@ namespace ConsoleApp2
         /// <param name="sex">男：1，原50岁退休女：2，原55岁退休女：3</param>
         /// <param name="femaleType">女员工类型，原退休年龄是55岁或者50岁</param>
         /// <param name="delayMonths">延迟月数</param>
-        /// <returns></returns>
+        /// <returns>退休的日期</returns>
         internal static DateTime CalcRetireDate(DateTime birthday, int sex, out int delayMonths)
         {
-            delayMonths = 0;
-
             delayMonths = 0;
             if (sex == 1)
             {
@@ -147,6 +151,12 @@ namespace ConsoleApp2
             }
         }
 
+        /// <summary>
+        /// 获取年龄描述
+        /// </summary>
+        /// <param name="birthDate"></param>
+        /// <param name="targetDate"></param>
+        /// <returns></returns>
         internal static string GetRetireAgeDescription(DateTime birthDate, DateTime targetDate)
         {
             // 计算年龄年份和月份

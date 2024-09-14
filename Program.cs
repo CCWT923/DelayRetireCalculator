@@ -45,10 +45,10 @@ namespace ConsoleApp2
 
                 Console.WriteLine();
                 Console.WriteLine("---------------------计算结果---------------------");
-                Console.WriteLine($"职工类型：{(sex == 1 ? '男' : sex == 2 ? "原50岁退休女职工" : "原55岁退休女职工")}");
-                Console.WriteLine($"出生日期：{birthdate:yyyy年M月}");
-                Console.WriteLine($"退休时间：{res:yyyy年M月}");
-                Console.WriteLine($"退休年龄：{DelayRetireHelper.GetRetireAgeDescription(birthdate, res)}");
+                Console.WriteLine($"职工类型： {(sex == 1 ? '男' : sex == 2 ? "原50岁退休女职工" : "原55岁退休女职工")}");
+                Console.WriteLine($"出生日期： {birthdate:yyyy年M月}");
+                Console.WriteLine($"退休时间： {res:yyyy年M月}");
+                Console.WriteLine($"退休年龄： {DelayRetireHelper.GetRetireAgeDescription(birthdate, res)}");
                 Console.WriteLine($"延迟退休： {ms}个月");
                 Console.WriteLine("_________________________________________________");
                 Console.WriteLine();
