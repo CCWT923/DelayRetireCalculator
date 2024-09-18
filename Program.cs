@@ -28,17 +28,6 @@ namespace ConsoleApp2
                 var res = DelayRetireHelper.CalcRetireDate(birthdate, sex, out int ms);
                 if(res.Year == 1)
                 {
-                    Console.WriteLine("----------------不在延迟退休范围内----------------");
-                    continue;
-                }
-                if(res.Year == 2)
-                {
-                    Console.WriteLine("----------------暂无相关政策----------------");
-                    continue;
-                }
-
-                if(res.Year == 3)
-                {
                     Console.WriteLine("----------------参数错误----------------");
                     continue;
                 }
@@ -49,7 +38,20 @@ namespace ConsoleApp2
                 Console.WriteLine($"出生日期： {birthdate:yyyy年M月}");
                 Console.WriteLine($"退休时间： {res:yyyy年M月}");
                 Console.WriteLine($"退休年龄： {DelayRetireHelper.GetRetireAgeDescription(birthdate, res)}");
-                Console.WriteLine($"延迟退休： {ms}个月");
+
+                if (ms > 0)
+                {
+                    Console.WriteLine($"延迟退休： {ms}个月");
+                }
+                else if(ms < 0)
+                {
+                    Console.WriteLine($"延迟退休： 0个月（后续政策变动可能会受影响）");
+                }
+                else
+                {
+                    Console.WriteLine("延迟退休： 0个月");
+                }
+                
                 Console.WriteLine("_________________________________________________");
                 Console.WriteLine();
             }

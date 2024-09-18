@@ -62,16 +62,15 @@ namespace ConsoleApp2
         /// 每4个月增加1个月
         /// </summary>
         private static readonly int maleRetireMonthIncrement = 1;
-        
+
 
         /// <summary>
         /// 计算退休年龄
         /// </summary>
         /// <param name="birthday">出生日期</param>
-        /// <param name="sex">男：1，原50岁退休女：2，原55岁退休女：3</param>
-        /// <param name="femaleType">女员工类型，原退休年龄是55岁或者50岁</param>
-        /// <param name="delayMonths">延迟月数</param>
-        /// <returns>退休的日期</returns>
+        /// <param name="sex">1:男员工，2：原50岁退休女员工，3：原55岁退休女员工</param>
+        /// <param name="delayMonths">延迟月份数。为0则表示没有延迟，-1表示暂无延迟规定，但后期政策可能变动</param>
+        /// <returns>退休的日期。如果返回值的年份为1，参数输入错误</returns>
         internal static DateTime CalcRetireDate(DateTime birthday, int sex, out int delayMonths)
         {
             delayMonths = 0;
@@ -79,39 +78,42 @@ namespace ConsoleApp2
             {
                 if (birthday < maleDelayRetireStart)
                 {
-                    return new DateTime(1, 1, 1);
+                    return birthday.AddYears(maleRetireBaseYear);
                 }
                 if (birthday > maleDelayRetireEnd)
                 {
-                    return new DateTime(2, 2, 2);
+                    delayMonths = -1;
+                    return birthday.AddYears(maleRetireBaseYear);
                 }
             }
             else if (sex == 2)
             {
                 if (birthday < femalDelayRetireStart50)
                 {
-                    return new DateTime(1, 1, 1);
+                    return birthday.AddYears(femaleRetireBaseYear50);
                 }
                 if (birthday > femalDelayRetireEnd50)
                 {
-                    return new DateTime(2, 2, 2);
+                    delayMonths = -1;
+                    return birthday.AddYears(femaleRetireBaseYear50);
                 }
             }
             else if (sex == 3)
             {
                 if (birthday < femalDelayRetireStart55)
                 {
-                    return new DateTime(1, 1, 1);
+                    return birthday.AddYears(femaleRetireBaseYear55);
                 }
 
                 if (birthday > femalDelayRetireEnd55)
                 {
-                    return new DateTime(2, 2, 2);
+                    delayMonths = -1;
+                    return birthday.AddYears(femaleRetireBaseYear55);
                 }
             }
             else
             {
-                return new DateTime(3, 3, 3);
+                return new DateTime(1, 1, 1);
             }
 
             DateTime tmpDt;
